@@ -61,11 +61,10 @@ This will build and run the tool in-place using the .NET SDK.
 
 ---
 
-## 🛠️ Building for Other Platforms
-
-You can build for other OS targets:
+## 🛠️ Building 
 
 ```bash
+# linux
 dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o ./dist-linux
 
 # macOS
