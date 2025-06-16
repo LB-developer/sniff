@@ -17,6 +17,7 @@ public static class StatusParser
 
         status.isGitRepo = true;
 
+        // evaluate static properties
         var lines = result.stdOut.Split('\n', StringSplitOptions.RemoveEmptyEntries);
         if (lines.Length > 0)
         {
@@ -26,19 +27,25 @@ public static class StatusParser
             status.isBehindRemote = firstLine.Contains("behind");
         }
 
+        // count changes in the output
         foreach (var line in lines.Skip(1))
         {
             if (line.StartsWith("??"))
-                status.hasUntrackedFiles = true;
-            else if (
-                           line.StartsWith(" M")
-                        || line.StartsWith("M ")
-                        || line.StartsWith(" A")
-                        || line.StartsWith("A ")
-                        || line.StartsWith(" D")
-                        || line.StartsWith("D ")
-                    )
-                status.hasUncommittedChanges = true;
+            {
+                status.uncommittedChanges++;
+            }
+            else if (line.StartsWith(" M") || line.StartsWith("M "))
+            {
+                status.modifiedFiles++;
+            }
+            else if (line.StartsWith(" A") || line.StartsWith("A "))
+            {
+                status.addedFiles++;
+            }
+            else if (line.StartsWith(" D") || line.StartsWith("D "))
+            {
+                status.deletedFiles++;
+            }
         }
 
         return status;
@@ -62,16 +69,21 @@ public static class StatusParser
             return "📂 Not a git repository";
 
         var sb = new StringBuilder();
-        sb.AppendLine($"Branch: {parsed.branch}");
-        sb.AppendLine($"Uncommitted changes?: {parsed.hasUncommittedChanges}");
-        sb.AppendLine($"Untracked files?: {parsed.hasUntrackedFiles}");
+        int totalWidth = 40;
+        sb.AppendLine();
+        sb.AppendLine($"Current Branch {String.Format("|{0,5}", parsed.branch)}".PadLeft(totalWidth));
+        sb.AppendLine($"Uncommitted changes {String.Format("|{0,5}", parsed.uncommittedChanges)}".PadLeft(totalWidth));
+        sb.AppendLine($"Added files {String.Format("|{0,5}", parsed.addedFiles)}".PadLeft(totalWidth));
+        sb.AppendLine($"Deleted files {String.Format("|{0,5}", parsed.deletedFiles)}".PadLeft(totalWidth));
+        sb.AppendLine($"Modified files {String.Format("|{0,5}", parsed.modifiedFiles)}".PadLeft(totalWidth));
+        sb.AppendLine();
 
         if (parsed.isAheadOfRemote)
-            sb.AppendLine("Ahead of remote: True");
+            sb.AppendLine("Ahead of remote: True".PadLeft(totalWidth));
         else if (parsed.isBehindRemote)
-            sb.AppendLine("Behind remote: True");
+            sb.AppendLine("Behind remote: True".PadLeft(totalWidth));
         else
-            sb.AppendLine("Branch is in sync with remote");
+            sb.AppendLine("Branch is in sync with remote".PadLeft(totalWidth));
 
         return sb.ToString();
     }

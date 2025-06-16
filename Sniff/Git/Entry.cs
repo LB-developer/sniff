@@ -45,7 +45,7 @@ public class Entry
 
     private void ReturnSuccess(string message)
     {
-        Console.Write($"------------ Sniff Report for {Environment.CurrentDirectory} ------------\n");
+        Console.Write($"-- Sniff Report for {Environment.CurrentDirectory} ------------\n");
         Console.WriteLine(message);
         Environment.Exit(0);
     }
