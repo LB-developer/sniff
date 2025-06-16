@@ -8,65 +8,74 @@ public static class TestData
     public static IEnumerable<TestCaseData> GitParseCases()
     {
         yield return new TestCaseData(
-                new Result { stdOut = GitStatusMocks.CleanRepo(), stdErr = "", exitCode = 0 },
-                new Status
-                {
-                    branch = "main",
-                    hasUncommittedChanges = false,
-                    hasUntrackedFiles = false,
-                    isAheadOfRemote = false,
-                    isBehindRemote = false,
-                    isGitRepo = true,
-                }).SetName("CleanRepo");
+            new Result { stdOut = GitStatusMocks.CleanRepo(), stdErr = "", exitCode = 0 },
+            new Status
+            {
+                branch = "main",
+                uncommittedChanges = 0,
+                addedFiles = 0,
+                deletedFiles = 0,
+                modifiedFiles = 0,
+                isAheadOfRemote = false,
+                isBehindRemote = false,
+                isGitRepo = true,
+            }).SetName("CleanRepo");
 
         yield return new TestCaseData(
-                new Result { stdOut = GitStatusMocks.ModifiedFiles(), stdErr = "", exitCode = 0 },
-                new Status
-                {
-                    branch = "main",
-                    hasUncommittedChanges = true,
-                    hasUntrackedFiles = false,
-                    isAheadOfRemote = false,
-                    isBehindRemote = false,
-                    isGitRepo = true,
-                }).SetName("ModifiedFiles");
-
-
-        yield return new TestCaseData(
-                new Result { stdOut = GitStatusMocks.StagedAndUntracked(), stdErr = "", exitCode = 0 },
-                new Status
-                {
-                    branch = "main",
-                    hasUncommittedChanges = true,
-                    hasUntrackedFiles = true,
-                    isAheadOfRemote = false,
-                    isBehindRemote = false,
-                    isGitRepo = true,
-                }).SetName("StageAndUntracked");
+            new Result { stdOut = GitStatusMocks.ModifiedFiles(), stdErr = "", exitCode = 0 },
+            new Status
+            {
+                branch = "main",
+                uncommittedChanges = 0,
+                addedFiles = 0,
+                deletedFiles = 0,
+                modifiedFiles = 1,
+                isAheadOfRemote = false,
+                isBehindRemote = false,
+                isGitRepo = true,
+            }).SetName("ModifiedFiles");
 
         yield return new TestCaseData(
-                new Result { stdOut = GitStatusMocks.ModifiedAndStagedAndUntracked(), stdErr = "", exitCode = 0 },
-                new Status
-                {
-                    branch = "main",
-                    hasUncommittedChanges = true,
-                    hasUntrackedFiles = true,
-                    isAheadOfRemote = false,
-                    isBehindRemote = false,
-                    isGitRepo = true,
-                }).SetName("ModifiedAndStagedAndUntracked");
+            new Result { stdOut = GitStatusMocks.StagedAndUntracked(), stdErr = "", exitCode = 0 },
+            new Status
+            {
+                branch = "main",
+                uncommittedChanges = 1,
+                addedFiles = 1,
+                deletedFiles = 0,
+                modifiedFiles = 0,
+                isAheadOfRemote = false,
+                isBehindRemote = false,
+                isGitRepo = true,
+            }).SetName("StagedAndUntracked");
 
         yield return new TestCaseData(
-                new Result { stdOut = "", stdErr = GitStatusMocks.NotARepo(), exitCode = 0 },
-                new Status
-                {
-                    branch = "",
-                    hasUncommittedChanges = false,
-                    hasUntrackedFiles = false,
-                    isAheadOfRemote = false,
-                    isBehindRemote = false,
-                    isGitRepo = false,
-                }).SetName("NotARepo");
+            new Result { stdOut = GitStatusMocks.ModifiedAndStagedAndUntracked(), stdErr = "", exitCode = 0 },
+            new Status
+            {
+                branch = "main",
+                uncommittedChanges = 1,
+                addedFiles = 1,
+                deletedFiles = 1,
+                modifiedFiles = 1,
+                isAheadOfRemote = false,
+                isBehindRemote = false,
+                isGitRepo = true,
+            }).SetName("ModifiedAndStagedAndUntracked");
+
+        yield return new TestCaseData(
+            new Result { stdOut = "", stdErr = GitStatusMocks.NotARepo(), exitCode = 0 },
+            new Status
+            {
+                branch = "",
+                uncommittedChanges = 0,
+                addedFiles = 0,
+                deletedFiles = 0,
+                modifiedFiles = 0,
+                isAheadOfRemote = false,
+                isBehindRemote = false,
+                isGitRepo = false,
+            }).SetName("NotARepo");
     }
 }
 

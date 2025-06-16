@@ -28,11 +28,15 @@ sniff git
 Output:
 
 ```
------------- Sniff Report for {current_location} ------------
-Branch: main
-Uncommitted changes?: False
-Untracked files?: True
-Branch is in sync with remote
+-- Sniff Report for {current_location} ------------
+
+           Current Branch |  foo
+      Uncommitted changes |    1
+              Added files |    2
+            Deleted files |    3
+           Modified files |    4
+
+   Branch is in sync with remote
 ```
 
 ---
@@ -81,7 +85,7 @@ You’ll find the executable in the respective output folders.
 ## 📋 Roadmap
 
 - [x] Parse and summarize `git status -sb`
-- [ ] Count staged, modified, deleted, untracked files
+- [x] Count staged, modified, deleted, untracked files
 - [ ] Display relevant environment variables
 - [ ] Add branch tracking summary
 - [ ] Add flag options for filtering
